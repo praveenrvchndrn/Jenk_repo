@@ -7,7 +7,11 @@ terraform {
   }
 }
 
-resource "local_file" "devops_practice" {
-  content  = "Terraform module executed successfully via Jenkins CI/CD!"
-  filename = "${path.module}/tf_output.txt"
+provider "aws" {
+    region= "us-east-1" 
+}
+
+module "S3_bucket" {
+    source = "git::https://github.com/praveenrvchndrn/realtime.git//S3"
+    aws_s3_bucket = "three-tier-devsecops-project-bucket-s3-24055"
 }
