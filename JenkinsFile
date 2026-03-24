@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Terraform Init') {
+            steps {
+                echo 'Initializing Terraform...'
+                sh 'terraform init'
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
+                echo 'Planning infrastructure changes...'
+                sh 'terraform plan -out=tfplan'
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                echo 'Applying infrastructure changes...'
+                // The -auto-approve flag is required so Jenkins doesn't get stuck waiting for a "yes" prompt
+                sh 'terraform apply -auto-approve tfplan' 
+            }
+        }
+    }
+}
